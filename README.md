@@ -18,3 +18,6 @@ Use this as a starting point to complete the WDD 330 team activity: the SleepOut
 - `npm run build` to build final files when you are ready to turn in.
 - `npm run lint` to run ESLint against your code to find errors.
 - `npm run format` to run Prettier to automatically format your code.
+
+## Random URL: 
+https://66f48d52abfd4f4401e802d8--transcendent-choux-429da9.netlify.app/

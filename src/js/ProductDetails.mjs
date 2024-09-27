@@ -30,7 +30,7 @@ export default class ProductDetails {
       this.product = await this.dataSource.findProductById(this.productId);
       
       // Render the product details in HTML
-      this.renderProductDetails();
+      this.renderProductDetails(); // inther solutioh ("main")
   
       // Add an event listener to the "Add to Cart" button
       document.getElementById("addToCart")
@@ -58,3 +58,14 @@ export default class ProductDetails {
         alert(`${this.product.NameWithoutBrand} has been added to your cart!`);
       }
   }
+
+  //the solution 
+ // addToCart() {
+ //   setLocalStorage("so-cart", this.product);
+ // }
+ // renderProductDetails(selector) {
+ //   const element = document.querySelector(selector);
+ //   element.insertAdjacentHTML(
+ //     "afterBegin",
+ //     productDetailsTemplate(this.product)
+ //   );

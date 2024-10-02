@@ -10,8 +10,12 @@ function renderCartContents() {
     return;
   }
 
+  // Create HTML for each cart item and display them
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
   document.querySelector(".product-list").innerHTML = htmlItems.join("");
+
+  // After rendering the cart items, calculate the total price
+  calculateTotal(cartItems);
 }
 
 function cartItemTemplate(item) {
@@ -33,4 +37,19 @@ function cartItemTemplate(item) {
   return newItem;
 }
 
+// Function to calculate the total price of all items in the cart
+function calculateTotal(cartItems) {
+  let total = 0;
+
+  // Loop through each cart item and add up the price
+  cartItems.forEach((item) => {
+    total += item.FinalPrice; // Assuming the FinalPrice field contains the price
+  });
+
+  // Display the total price in the HTML
+  document.getElementById("cart-total").textContent =
+    `Total: $${total.toFixed(2)}`;
+}
+
+// Call renderCartContents when the page loads
 renderCartContents();

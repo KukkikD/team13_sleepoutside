@@ -46,26 +46,8 @@ export default class ProductDetails {
     }
   
     addToCart() {
-        // Retrieve the cart from localStorage or create a new one
-        const cart = JSON.parse(localStorage.getItem("cart")) || [];
-        
-        // Add the current product to the cart
-        cart.push(this.product);
-        
-        // Use setLocalStorage to store the updated cart
-        setLocalStorage("cart", cart);
-      
-        alert(`${this.product.NameWithoutBrand} has been added to your cart!`);
-      }
-  }
-
-  //the solution 
- // addToCart() {
- //   setLocalStorage("so-cart", this.product);
- // }
- // renderProductDetails(selector) {
- //   const element = document.querySelector(selector);
- //   element.insertAdjacentHTML(
- //     "afterBegin",
- //     productDetailsTemplate(this.product)
- //   );
+      setLocalStorage("so-cart", this.product);
+    }
+    
+}
+  

@@ -26,15 +26,14 @@ export default class ProductDetails {
     }
   
     async init() {
-      // Use the dataSource to get product details
-      this.product = await this.dataSource.findProductById(this.productId);
-      
-      // Render the product details in HTML
-      this.renderProductDetails(); // inther solutioh ("main")
-  
-      // Add an event listener to the "Add to Cart" button
-      document.getElementById("addToCart")
-        .addEventListener("click", this.addToCart.bind(this));
+      try {
+        this.product = await this.dataSource.findProductById(this.productId);
+        this.renderProductDetails();
+        document.getElementById("addToCart").addEventListener("click", this.addToCart.bind(this));
+      } catch (error) {
+        console.error("Error fetching product details:", error);
+        // Optionally, display an error message to the user
+      }
     }
   
     renderProductDetails() {
@@ -46,7 +45,16 @@ export default class ProductDetails {
     }
   
     addToCart() {
-      setLocalStorage("so-cart", this.product);
+      const cart = JSON.parse(localStorage.getItem("so-cart")) || [];
+      const existingProduct = cart.find(item => item.Id === this.product.Id);
+      
+      if (existingProduct) {
+        alert("This product is already in your cart.");
+      } else {
+        cart.push(this.product);
+        setLocalStorage("so-cart", cart);
+        alert("Product added to cart!");
+      }
     }
     
 }

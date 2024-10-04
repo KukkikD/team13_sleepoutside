@@ -10,6 +10,7 @@ function calculateFinalPrice(item) {
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
 
+<<<<<<< HEAD
   // Check if there are any items in the cart and if it's an array
   if (!Array.isArray(cartItems) || cartItems.length === 0) {
     document.querySelector(".product-list").innerHTML =
@@ -18,6 +19,8 @@ function renderCartContents() {
   }
 
   // Map through the cart items and generate HTML for each
+=======
+>>>>>>> 38118cfeb7a6d88203c71cd874958f4176df1e4f
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
   document.querySelector(".product-list").innerHTML = htmlItems.join("");
 }

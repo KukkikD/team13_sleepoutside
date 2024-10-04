@@ -1,12 +1,32 @@
 import { getLocalStorage } from "./utils.mjs";
 
+// Function to calculate the final price after applying discount
+function calculateFinalPrice(item) {
+  const discountAmount = (item.FinalPrice * item.Discount) / 100;
+  return item.FinalPrice - discountAmount;
+}
+
+// Function to render the cart contents
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
+
+  // Check if there are any items in the cart and if it's an array
+  if (!Array.isArray(cartItems) || cartItems.length === 0) {
+    document.querySelector(".product-list").innerHTML =
+      "<p>Your cart is empty.</p>";
+    return;
+  }
+
+  // Map through the cart items and generate HTML for each
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
   document.querySelector(".product-list").innerHTML = htmlItems.join("");
 }
 
+// Function to generate HTML for each cart item
 function cartItemTemplate(item) {
+  // Calculate the final price after applying discount
+  const finalPrice = calculateFinalPrice(item).toFixed(2);
+
   const newItem = `<li class="cart-card divider">
     <a href="#" class="cart-card__image">
       <img
@@ -19,59 +39,13 @@ function cartItemTemplate(item) {
     </a>
     <p class="cart-card__color">${item.Colors[0].ColorName}</p>
     <p class="cart-card__quantity">qty: 1</p>
-    <p class="cart-card__price">$${item.FinalPrice}</p>
+    <p class="cart-card__price">Original Price: $${item.FinalPrice}</p>
+    <p class="cart-card__discount">Discount: ${item.Discount}%</p>
+    <p class="cart-card__final-price">Final Price: $${finalPrice}</p>
   </li>`;
 
   return newItem;
 }
 
-const products = [
-  {
-    name: 'Marmot Ajax Tent',
-    price: 199.99,
-    discount: 10, // 10% discount
-    quantity: 1
-  },
-  {
-    name: 'The North Face Talus Tent',
-    price: 299.99,
-    discount: 5, // 5% discount
-    quantity: 1
-  },
-  {
-    name: 'Big Agnes Copper Spur Tent',
-    price: 399.99,
-    discount: 15, // 15% discount
-    quantity: 1
-  }
-];
-
-function calculateFinalPrice(product) {
-  const discountAmount = (product.price * product.discount) / 100;
-  return product.price - discountAmount;
-}
-
-function updateCartDisplay() {
-  const productListElement = document.querySelector('.product-list');
-  productListElement.innerHTML = ''; // Clear the list
-
-  products.forEach((product) => {
-    const finalPrice = calculateFinalPrice(product).toFixed(2);
-
-    const productHTML = `
-      <li class="cart-card divider">
-        <h2 class="card__name">${product.name}</h2>
-        <p class="cart-card__price">Price: $${product.price}</p>
-        <p class="cart-card__discount">Discount: ${product.discount}%</p>
-        <p class="cart-card__final-price">Final Price: $${finalPrice}</p>
-      </li>
-    `;
-    productListElement.innerHTML += productHTML;
-  });
-}
-
-// Run the function to update the cart display when the page loads
-document.addEventListener('DOMContentLoaded', updateCartDisplay);
-
-
+// Initialize the rendering of cart contents
 renderCartContents();

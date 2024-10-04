@@ -32,9 +32,9 @@ export default class ProductListing {
     }
 
     // Filter Products : Write a method  to filter the product list to the four tents we need
-    filterProducts(products) {
-    return products.filter(product =>
-      ["tent1", "tent2", "tent3", "tent4"].includes(product.Id) // Update with actual IDs
-    );
-  }
+    //filterProducts(products) {
+    //return products.filter(product =>
+      //["tent1", "tent2", "tent3", "tent4"].includes(product.Id) // Update with actual IDs
+    //);
+  //}
   }

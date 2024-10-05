@@ -1,18 +1,18 @@
 import { getLocalStorage } from "./utils.mjs";
 
 function renderCartContents() {
-  const cartItems = getLocalStorage("so-cart");
+  const cartItems = getLocalStorage("so-cart") || [];
 
-  // Check if there are any items in the cart and if it's an array
+  // Check if there are any items in the cart
   if (!Array.isArray(cartItems) || cartItems.length === 0) {
     document.querySelector(".product-list").innerHTML =
       "<p>Your cart is empty.</p>";
     return;
   }
 
-  // Create HTML for each cart item and display them
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
   document.querySelector(".product-list").innerHTML = htmlItems.join("");
+
 
   // After rendering the cart items, calculate the total price
   calculateTotal(cartItems);

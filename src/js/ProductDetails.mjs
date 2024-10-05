@@ -42,13 +42,14 @@ export default class ProductDetails {
     
     addToCart() {
       // Get the current cart from LocalStorage
-      let cart = getLocalStorage("so-cart") || [];
+      const cartItems = getLocalStorage("so-cart") || [];
     
       // Add the new product to the cart
-      cart.push(this.product);
-    
+      cartItems.push(this.product);
+      
       // Save the updated cart back to LocalStorage
-      setLocalStorage("so-cart", cart);
+      setLocalStorage("so-cart", cartItems);
+   
     }
 
     renderProductDetails(selector) {

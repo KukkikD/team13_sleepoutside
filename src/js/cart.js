@@ -1,59 +1,77 @@
 import { getLocalStorage } from "./utils.mjs";
 
+// Function to render the cart items
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart") || [];
 
-  // Check if there are any items in the cart
   if (!Array.isArray(cartItems) || cartItems.length === 0) {
-    document.querySelector(".product-list").innerHTML =
-      "<p>Your cart is empty.</p>";
+    document.querySelector(".product-list").innerHTML = "<p>Your cart is empty.</p>";
+    document.querySelector(".cart-footer").classList.add("hide");
     return;
   }
 
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
   document.querySelector(".product-list").innerHTML = htmlItems.join("");
+
+  // After rendering the cart items, update the total price
+  updateTotalPrice(cartItems);
+  document.querySelector(".cart-footer").classList.remove("hide");
 }
 
-  // Create HTML for each cart item and display them
-  const htmlItems = cartItems.map((item) => cartItemTemplate(item));
-  document.querySelector(".product-list").innerHTML = htmlItems.join("");
+// Function to update the total price
+function updateTotalPrice(cartItems) {
+  const totalPriceElement = document.getElementById("cart-total");
 
-  // After rendering the cart items, calculate the total price
-  calculateTotal(cartItems);
+  // Correctly calculate total using item quantity
+  const total = cartItems.reduce((acc, item) => {
+    const price = parseFloat(item.FinalPrice) || 0; // Convert to number, otherwise 0
+    const quantity = parseInt(item.quantity) || 1; // Convert to integer, otherwise 1
+    return acc + (price * quantity);
+  }, 0);
+
+  totalPriceElement.textContent = `Total: $${total.toFixed(2)}`;
 }
 
+// Function to remove or reduce item from cart
+window.removeFromCart = function(Id) {
+  let cartItems = getLocalStorage("so-cart") || [];
+
+  // Find the item in the cart
+  const itemIndex = cartItems.findIndex(item => item.Id === Id);
+  if (itemIndex !== -1) {
+    // Reduce quantity by 1
+    if (cartItems[itemIndex].quantity > 1) {
+      cartItems[itemIndex].quantity -= 1;
+    } else {
+      // If the quantity is 1, remove the item
+      cartItems.splice(itemIndex, 1);
+    }
+
+    // Update the cart in local storage
+    localStorage.setItem("so-cart", JSON.stringify(cartItems));
+
+    // Re-render the cart contents
+    renderCartContents();
+  }
+};
+
+// Template for individual cart item
 function cartItemTemplate(item) {
   const newItem = `<li class="cart-card divider">
     <a href="#" class="cart-card__image">
-      <img
-        src="${item.Image}"
-        alt="${item.Name}"
-      />
+      <img src="${item.Image}" alt="${item.Name}" />
     </a>
     <a href="#">
       <h2 class="card__name">${item.Name}</h2>
     </a>
     <p class="cart-card__color">${item.Colors[0].ColorName}</p>
-    <p class="cart-card__quantity">qty: 1</p>
+    <p class="cart-card__quantity">qty: ${item.quantity}</p>
     <p class="cart-card__price">$${item.FinalPrice}</p>
+    <button onclick="removeFromCart('${item.Id}')">Remove</button> <!-- Use Id with uppercase "I" -->
   </li>`;
 
   return newItem;
 }
 
-// Function to calculate the total price of all items in the cart
-function calculateTotal(cartItems) {
-  let total = 0;
-
-  // Loop through each cart item and add up the price
-  cartItems.forEach((item) => {
-    total += item.FinalPrice; // Assuming the FinalPrice field contains the price
-  });
-
-  // Display the total price in the HTML
-  document.getElementById("cart-total").textContent =
-    `Total: $${total.toFixed(2)}`;
-}
-
-// Call renderCartContents when the page loads
-renderCartContents();
+// Call this function on page load to display the cart
+document.addEventListener("DOMContentLoaded", renderCartContents);

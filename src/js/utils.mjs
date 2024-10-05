@@ -13,23 +13,6 @@ export function getLocalStorage(key) {
 export function setLocalStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
-// set a listener for both touchend and click
-export function setClick(selector, callback) {
-  qs(selector).addEventListener("touchend", (event) => {
-    event.preventDefault();
-    callback();
-  });
-  qs(selector).addEventListener("click", callback);
-}
-
-//Utilize the renderListWithTemplate Function
-export function renderListWithTemplate(templateFn, parentElement, list, position = "afterbegin", clear = false) {
-  if (clear) { //this code the teacher place under const htmlStripngs
-    parentElement.innerHTML = " ";
-  }
-  const htmlStrings = list.map(templateFn).join(" ");
-  parentElement.insertAdjacentHTML(position, htmlStrings);
-}
 
 // get parameter 
 export function getParam(param) {
@@ -37,4 +20,13 @@ export function getParam(param) {
   const urlParams = new URLSearchParams(queryString);
   const product = urlParams.get(param);
   return product;
+}
+
+// set a listener for both touchend and click
+export function setClick(selector, callback) {
+  qs(selector).addEventListener("touchend", (event) => {
+    event.preventDefault();
+    callback();
+  });
+  qs(selector).addEventListener("click", callback);
 }

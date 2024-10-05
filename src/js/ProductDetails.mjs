@@ -26,36 +26,32 @@ export default class ProductDetails {
     }
   
     async init() {
-      try {
-        this.product = await this.dataSource.findProductById(this.productId);
-        this.renderProductDetails();
-        document.getElementById("addToCart").addEventListener("click", this.addToCart.bind(this));
-      } catch (error) {
-        console.error("Error fetching product details:", error);
-        // Optionally, display an error message to the user
-      }
-    }
-  
-    renderProductDetails() {
-        // Get the container element
-        const productContainer = document.getElementById("productDetailsContainer");
-      
-        // Generate HTML using the productDetailsTemplate
-        productContainer.innerHTML = productDetailsTemplate(this.product);
-    }
-  
-    addToCart() {
-      const cart = JSON.parse(localStorage.getItem("so-cart")) || [];
-      const existingProduct = cart.find(item => item.Id === this.product.Id);
-      
-      if (existingProduct) {
-        alert("This product is already in your cart.");
-      } else {
-        cart.push(this.product);
-        setLocalStorage("so-cart", cart);
-        alert("Product added to cart!");
-      }
-    }
+      // Get product details
+      this.product = await this.dataSource.findProductById(this.productId);
     
+      // Log the product data to the console
+      console.log(this.product);
+    
+      // Render product details
+      this.renderProductDetails("main");
+    
+      // Add an event listener to the "Add to Cart" button
+      document
+        .getElementById("addToCart")
+        .addEventListener("click", this.addToCart.bind(this));
+    }
+
+    
+    addToCart() {
+      setLocalStorage("so-cart", this.product);
+    }
+    renderProductDetails(selector) {
+      const element = document.querySelector(selector);
+      element.insertAdjacentHTML(
+        "afterBegin",
+        productDetailsTemplate(this.product)
+      );
+    }
 }
+
   

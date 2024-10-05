@@ -5,7 +5,8 @@ function renderCartContents() {
   const cartItems = getLocalStorage("so-cart") || [];
 
   if (!Array.isArray(cartItems) || cartItems.length === 0) {
-    document.querySelector(".product-list").innerHTML = "<p>Your cart is empty.</p>";
+    document.querySelector(".product-list").innerHTML =
+      "<p>Your cart is empty.</p>";
     document.querySelector(".cart-footer").classList.add("hide");
     return;
   }
@@ -26,18 +27,18 @@ function updateTotalPrice(cartItems) {
   const total = cartItems.reduce((acc, item) => {
     const price = parseFloat(item.FinalPrice) || 0; // Convert to number, otherwise 0
     const quantity = parseInt(item.quantity) || 1; // Convert to integer, otherwise 1
-    return acc + (price * quantity);
+    return acc + price * quantity;
   }, 0);
 
   totalPriceElement.textContent = `Total: $${total.toFixed(2)}`;
 }
 
 // Function to remove or reduce item from cart
-window.removeFromCart = function(Id) {
+window.removeFromCart = function (Id) {
   let cartItems = getLocalStorage("so-cart") || [];
 
   // Find the item in the cart
-  const itemIndex = cartItems.findIndex(item => item.Id === Id);
+  const itemIndex = cartItems.findIndex((item) => item.Id === Id);
   if (itemIndex !== -1) {
     // Reduce quantity by 1
     if (cartItems[itemIndex].quantity > 1) {

@@ -23,12 +23,16 @@ export default class ProductList {
   async init() {
     // Get the data from the data source
     const list = await this.dataSource.getData();
-    
+
     // Get unique products based on Id
-    const uniqueProducts = this.getUniqueProducts(list);
+    // const uniqueProducts = this.getUniqueProducts(list);
 
     // Render the list of unique products
-    renderListWithTemplate(productCardTemplate, this.listElement, uniqueProducts);
+    renderListWithTemplate(
+      productCardTemplate,
+      this.listElement,
+      list, //uniqueProducts,
+    );
   }
 
   getUniqueProducts(products) {

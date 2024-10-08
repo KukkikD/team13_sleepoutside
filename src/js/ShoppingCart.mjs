@@ -1,33 +1,75 @@
-import { getLocalStorage } from "./utils.mjs";
+import { getLocalStorage, setLocalStorage } from "./utils.mjs"; // Assuming setLocalStorage exists
 
-function cartItemTemplate(item) {
+function cartItemTemplate(item, index) {
   const newItem = `<li class="cart-card divider">
-  <a href="#" class="cart-card__image">
-    <img
-      src="${item.Image}"
-      alt="${item.Name}"
-    />
-  </a>
-  <a href="#">
-    <h2 class="card__name">${item.Name}</h2>
-  </a>
-  <p class="cart-card__color">${item.Colors[0].ColorName}</p>
-  <p class="cart-card__quantity">qty: 1</p>
-  <p class="cart-card__price">$${item.FinalPrice}</p>
-</li>`;
-
+    <a href="product_pages/${item.Id}.html" class="cart-card__image">
+      <img
+        src="${item.Image}"
+        alt="${item.Name}"
+      />
+    </a>
+    <a href="product_pages/${item.Id}.html">
+      <h2 class="card__name">${item.Name}</h2>
+    </a>
+    <p class="cart-card__color">${item.Colors[0].ColorName}</p>
+    <p class="cart-card__quantity">qty: 1</p>
+    <p class="cart-card__price">$${item.FinalPrice}</p>
+    <button class="remove-item" data-index="${index}">X</button> <!-- ปุ่มลบสินค้า -->
+  </li>`;
   return newItem;
 }
 
 export default class ShoppingCart {
-  constructor(key, parentSelector) {
+  constructor(key, productListSelector, summarySelector, cartFooterSelector) {
     this.key = key;
-    this.parentSelector = parentSelector;
+    this.productListSelector = productListSelector;
+    this.summarySelector = summarySelector;
+    this.cartFooterSelector = cartFooterSelector;
   }
+
   renderCartContents() {
     const cartItems = getLocalStorage(this.key);
-    const htmlItems = cartItems.map((item) => cartItemTemplate(item));
-    document.querySelector(this.parentSelector).innerHTML = htmlItems.join("");
+
+    // If there are no products in the cart, a message will appear stating "Cart is empty".
+    if (!cartItems || cartItems.length === 0) {
+      document.querySelector(this.productListSelector).innerHTML = "<p>Your cart is empty</p>";
+      document.querySelector(this.cartFooterSelector).classList.add("hide");
+      return;
+    }
+
+    // Show items in cart
+    const htmlItems = cartItems.map((item, index) => cartItemTemplate(item, index));
+    document.querySelector(this.productListSelector).innerHTML = htmlItems.join("");
+
+    // Show delete product button
+    document.querySelectorAll(".remove-item").forEach(button => {
+      button.addEventListener("click", (event) => {
+        const index = event.target.dataset.index;
+        this.removeItem(index);
+      });
+    });
+
+    // Show the total price in the cart
+    this.renderCartSummary(cartItems);
+    document.querySelector(this.cartFooterSelector).classList.remove("hide");
+  }
+
+  // Function delete item from cart.
+  removeItem(index) {
+    let cartItems = getLocalStorage(this.key);
+    cartItems.splice(index, 1); // ลบสินค้าตาม index
+    setLocalStorage(this.key, cartItems); // อัปเดต localStorage
+    this.renderCartContents(); // รีเฟรชตะกร้าหลังจากลบสินค้า
+  }
+
+  // ฟังก์ชันคำนวณราคารวมในตะกร้า
+  renderCartSummary(cartItems) {
+    const total = cartItems.reduce((sum, item) => sum + item.FinalPrice, 0);
+    document.querySelector(this.summarySelector).textContent = `Total: $${total.toFixed(2)}`;
+  }
+
+  init() {
+    this.renderCartContents();
   }
 }
 

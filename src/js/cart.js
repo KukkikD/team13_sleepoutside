@@ -5,5 +5,10 @@ import ShoppingCart from "./ShoppingCart.mjs";
 loadHeaderFooter();
 
 // Initialize the shopping cart and render contents
-const cart = new ShoppingCart("so-cart", ".product-list");
-cart.renderCartContents();
+const cart = new ShoppingCart(
+  "so-cart",
+  ".product-list",
+  "#cart-total",
+  ".cart-footer",
+);
+cart.init(); // Use init() to display the contents of the basket and calculate the total price.

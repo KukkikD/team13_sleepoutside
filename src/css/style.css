@@ -119,6 +119,7 @@ button {
   max-width: 600px;
   margin: auto;
 }
+
 .products {
   padding: 0.5em;
 }
@@ -252,4 +253,45 @@ button {
 footer {
   font-size: var(--small-font);
   padding: 1em;
+}
+
+.newsletter {
+  background-color: #f3f3f3;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+.newsletter h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.newsletter p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+#newsletter-form input[type="email"] {
+  padding: 10px;
+  width: 80%;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+#newsletter-form button {
+  padding: 10px 20px;
+  background-color: var(--dark-grey);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#newsletter-form button:hover {
+  background-color: var(--secondary-color);
 }

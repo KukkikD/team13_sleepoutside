@@ -5,7 +5,7 @@ function productDetailsTemplate(product) {
     <h2 class="divider">${product.NameWithoutBrand}</h2>
     <img
       class="divider"
-      src="${product.Image}"
+      src="${product.Images.PrimaryLarge}"
       alt="${product.NameWithoutBrand}"
     />
     <p class="product-card__price">$${product.FinalPrice}</p>
@@ -24,34 +24,27 @@ export default class ProductDetails {
     this.product = {};
     this.dataSource = dataSource;
   }
-
   async init() {
-    // Get product details
+    // use our datasource to get the details for the current product. findProductById will return a promise! use await or .then() to process it
     this.product = await this.dataSource.findProductById(this.productId);
-
-
-    // Render product details
+    // once we have the product details we can render out the HTML
     this.renderProductDetails("main");
-
-    // Add an event listener to the "Add to Cart" button
+    // once the HTML is rendered we can add a listener to Add to Cart button
+    // Notice the .bind(this). Our callback will not work if we don't include that line. Review the readings from this week on 'this' to understand why.
     document
       .getElementById("addToCart")
       .addEventListener("click", this.addToCart.bind(this));
   }
-
-
   addToCart() {
-    // Get the current cart from LocalStorage
-    const cartItems = getLocalStorage("so-cart") || [];
-
-    // Add the new product to the cart
-    cartItems.push(this.product);
-
-    // Save the updated cart back to LocalStorage
-    setLocalStorage("so-cart", cartItems);
-
+    let cartContents = getLocalStorage("so-cart");
+    //check to see if there was anything there
+    if (!cartContents) {
+      cartContents = [];
+    }
+    // then add the current product to the list
+    cartContents.push(this.product);
+    setLocalStorage("so-cart", cartContents);
   }
-
   renderProductDetails(selector) {
     const element = document.querySelector(selector);
     element.insertAdjacentHTML(
@@ -60,4 +53,3 @@ export default class ProductDetails {
     );
   }
 }
-

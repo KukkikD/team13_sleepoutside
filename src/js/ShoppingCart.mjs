@@ -4,7 +4,7 @@ function cartItemTemplate(item, index) {
   const newItem = `<li class="cart-card divider">
     <a href="product_pages/${item.Id}.html" class="cart-card__image">
       <img
-        src="${item.Image}"
+        src="${item.Images.PrimaryLarge}"
         alt="${item.Name}"
       />
     </a>
@@ -14,7 +14,7 @@ function cartItemTemplate(item, index) {
     <p class="cart-card__color">${item.Colors[0].ColorName}</p>
     <p class="cart-card__quantity">qty: 1</p>
     <p class="cart-card__price">$${item.FinalPrice}</p>
-    <button class="remove-item" data-index="${index}">X</button> <!-- ปุ่มลบสินค้า -->
+    <button class="remove-item" data-index="${index}"> Remove</button> 
   </li>`;
   return newItem;
 }
@@ -57,12 +57,12 @@ export default class ShoppingCart {
   // Function delete item from cart.
   removeItem(index) {
     let cartItems = getLocalStorage(this.key);
-    cartItems.splice(index, 1); // ลบสินค้าตาม index
-    setLocalStorage(this.key, cartItems); // อัปเดต localStorage
-    this.renderCartContents(); // รีเฟรชตะกร้าหลังจากลบสินค้า
+    cartItems.splice(index, 1); // deleted item as index
+    setLocalStorage(this.key, cartItems); // update localStorage
+    this.renderCartContents(); // refesh cart after deleted
   }
 
-  // ฟังก์ชันคำนวณราคารวมในตะกร้า
+  // Function calculate the cart price 
   renderCartSummary(cartItems) {
     const total = cartItems.reduce((sum, item) => sum + item.FinalPrice, 0);
     document.querySelector(this.summarySelector).textContent = `Total: $${total.toFixed(2)}`;

@@ -2,9 +2,9 @@ import { renderListWithTemplate } from "./utils.mjs";
 
 function productCardTemplate(product) {
   return `<li class="product-card">
-  <a href="product_pages/index.html?product=${product.Id}">
+  <a href="/product_pages/index.html?product=${product.Id}">
   <img
-    src="${product.Image}"
+    src="${product.Images.PrimaryLarge}"
     alt="Image of ${product.Name}"
   />
   <h3 class="card__brand">${product.Brand.Name}</h3>
@@ -22,24 +22,23 @@ export default class ProductList {
 
   async init() {
     // Get the data from the data source
-    const list = await this.dataSource.getData();
-
-    // Get unique products based on Id
-    // const uniqueProducts = this.getUniqueProducts(list);
+    const list = await this.dataSource.getData(this.category);
+    // render the list
+    //this.renderList(list);
+   
 
     // Render the list of unique products
     renderListWithTemplate(
       productCardTemplate,
       this.listElement,
-      list, //uniqueProducts,
+      list, 
     );
+
+    // Set the title to the current category
+    document.querySelector(".title").innerHTML = this.category;
   }
 
-  getUniqueProducts(products) {
-    // Filter out duplicate products based on Id
-    return products.filter(
-      (product, index, self) =>
-        index === self.findIndex((p) => p.Id === product.Id)
-    );
+  renderList(list) {
+    renderListWithTemplate(productCardTemplate, this.listElement, list);
   }
 }

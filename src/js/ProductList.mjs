@@ -25,13 +25,13 @@ export default class ProductList {
     const list = await this.dataSource.getData(this.category);
     // render the list
     //this.renderList(list);
-   
+
 
     // Render the list of unique products
     renderListWithTemplate(
       productCardTemplate,
       this.listElement,
-      list, 
+      list,
     );
 
     // Set the title to the current category

@@ -4,6 +4,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   root: "src/",
 
+
   //Modify your vite to reflect the changes in your project structure:
   build: {
     outDir: "../dist",

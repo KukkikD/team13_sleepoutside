@@ -1,4 +1,4 @@
-import { getLocalStorage } from "./utils.mjs";
+import {setLocalStorage, getLocalStorage, alertMessage, removeAllAlerts} from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
 
 const services = new ExternalServices();
@@ -86,9 +86,11 @@ export default class CheckoutProcess {
     }
 }
 
-async checkout() {
+  async checkout() {
     const formElement = document.forms["checkout"];
+
     const json = formDataToJSON(formElement);
+    // add totals, and item details
     json.orderDate = new Date();
     json.orderTotal = this.orderTotal;
     json.tax = this.tax;
@@ -96,20 +98,20 @@ async checkout() {
     json.items = packageItems(this.list);
     console.log(json);
     try {
-        const res = await services.checkout(json);
-        console.log("Response from server:", res);
-        console.log("Error message from server:", res.message); // แสดงข้อความที่ได้รับจากเซิร์ฟเวอร์
-
-        // เปลี่ยนการตรวจสอบเงื่อนไข
-        if (res.orderId) {  // ตรวจสอบว่ามี orderId หมายถึงการสั่งซื้อสำเร็จ
-            alert("Order placed successfully! Order ID: " + res.orderId);
-            // Redirect to confirmation page if needed
-        } else {
-            alert("There was an error processing your order: " + res.message);
-        }
+      const res = await services.checkout(json);
+      console.log(res);
+      setLocalStorage("so-cart", []);
+      location.assign("/checkout/success.html");
     } catch (err) {
-        console.log(err);
-        alert("Something went wrong. Please try again later.");
+      // get rid of any preexisting alerts.
+      removeAllAlerts();
+      for (let message in err.message) {
+        alertMessage(err.message[message]);
+      }
+
+      console.log(err);
     }
+  }
 }
-}
+
+

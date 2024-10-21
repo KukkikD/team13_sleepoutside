@@ -31,8 +31,8 @@ header {
   padding: 0 10px;
 }
 .logo {
-  line-height: 60px;
-  width: 245px;
+  line-height: 100px;
+  width: 300px;
   overflow: hidden;
   display: flex;
   font-size: 30px;
@@ -40,8 +40,8 @@ header {
   font-family: var(--font-headline);
 }
 .logo img {
-  width: 60px;
-  height: 60px;
+  width: 100px;
+  height: 100px;
 }
 .logo a {
   text-decoration: none;
@@ -294,4 +294,62 @@ footer {
 
 #newsletter-form button:hover {
   background-color: var(--secondary-color);
+}
+
+
+
+
+/*ialidugliqgslflgwe*/
+
+/* Base Styles */
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav li {
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+  color: #fff;
+  background-color: #333;
+  text-align: center;
+}
+
+nav a:hover {
+  background-color: #555;
+}
+
+/* Mobile Styles (default) */
+nav {
+  display: block;
+  background-color: #333;
+}
+
+nav ul {
+  display: flex;
+  flex-direction: column;
+}
+
+nav a {
+  border-bottom: 1px solid #444;
+}
+
+/* Desktop Styles */
+@media screen and (min-width: 768px) {
+  nav ul {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  nav a {
+    border: none;
+    padding: 15px 20px;
+  }
 }
